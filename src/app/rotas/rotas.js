@@ -1,5 +1,5 @@
 module.exports = (app) =>{
-    
+
     app.get('/',function(request,response){
         console.log(`URL: '/' acessada`);
         response.send(`
