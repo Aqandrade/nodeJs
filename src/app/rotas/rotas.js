@@ -24,13 +24,12 @@ module.exports = (app) =>{
 
         const livroDao = new LivroDao(db);
 
-        livroDao.lista(function(erro,resultados){
-            response.marko(
-                require('../view/lista/lista.marko.js'),
-                {
-                    livros:resultados
-                }
-            )
-        })
+        livroDao.lista()
+            .then(livros => response.marko(require('../view/lista/lista.marko.js'),{
+                livros
+            }))
+            .catch(erro => console.log(erro));
+
+      
     });
 }
