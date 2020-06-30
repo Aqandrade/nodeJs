@@ -1,3 +1,5 @@
+const LivroDao = require('../infra/livro-dao');
+
 const db = require('../../config/database.js');
 
 module.exports = (app) =>{
@@ -17,13 +19,18 @@ module.exports = (app) =>{
     });
     
     app.get('/livros',function(request,response){
+        
         console.log(`URL: '/livros' acessada`);
 
-        db.all('SELECT * FROM livros',function(erro,resultados){
-            response.marko(require('../view/lista/lista.marko'),{
-                livros:resultados
-            });
-        });
+        const livroDao = new LivroDao(db);
 
+        livroDao.lista(function(erro,resultados){
+            response.marko(
+                require('../view/lista/lista.marko.js'),
+                {
+                    livros:resultados
+                }
+            )
+        })
     });
 }
