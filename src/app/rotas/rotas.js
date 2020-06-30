@@ -1,3 +1,7 @@
+const LivroDao = require('../infra/livro-dao');
+
+const db = require('../../config/database.js');
+
 module.exports = (app) =>{
 
     app.get('/',function(request,response){
@@ -14,19 +18,18 @@ module.exports = (app) =>{
         );
     });
     
-    app.get('/listagemLivros',function(request,response){
-        console.log(`URL: '/listagemLivros' acessada`);
-        response.marko(require('../view/lista/lista.marko'),{
-            livros: [
-                {
-                    id:1,
-                    titulo: 'Fundamentos do Node'
-                },
-                {
-                    id:2,
-                    titulo: 'Node Avançado'
-                }
-            ]
-        });
+    app.get('/livros',function(request,response){
+        
+        console.log(`URL: '/livros' acessada`);
+
+        const livroDao = new LivroDao(db);
+
+        livroDao.lista()
+            .then(livros => response.marko(require('../view/lista/lista.marko.js'),{
+                livros
+            }))
+            .catch(erro => console.log(erro));
+
+      
     });
 }
