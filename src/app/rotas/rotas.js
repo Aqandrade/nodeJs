@@ -1,3 +1,5 @@
+const db = require('../../config/database.js');
+
 module.exports = (app) =>{
 
     app.get('/',function(request,response){
@@ -14,19 +16,14 @@ module.exports = (app) =>{
         );
     });
     
-    app.get('/listagemLivros',function(request,response){
-        console.log(`URL: '/listagemLivros' acessada`);
-        response.marko(require('../view/lista/lista.marko'),{
-            livros: [
-                {
-                    id:1,
-                    titulo: 'Fundamentos do Node'
-                },
-                {
-                    id:2,
-                    titulo: 'Node Avançado'
-                }
-            ]
+    app.get('/livros',function(request,response){
+        console.log(`URL: '/livros' acessada`);
+
+        db.all('SELECT * FROM livros',function(erro,resultados){
+            response.marko(require('../view/lista/lista.marko'),{
+                livros:resultados
+            });
         });
+
     });
 }
