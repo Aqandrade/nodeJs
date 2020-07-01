@@ -25,11 +25,23 @@ module.exports = (app) =>{
         const livroDao = new LivroDao(db);
 
         livroDao.lista()
-            .then(livros => response.marko(require('../view/lista/lista.marko.js'),{
+            .then(livros => response.marko(require('../view/livros/lista/lista.marko'),{
                 livros
             }))
             .catch(erro => console.log(erro));
 
-      
+    });
+
+    app.get('/livros/form',function(request,response){
+        response.marko(require('../view/livros/form/form.marko'))
+    });
+
+    app.post('/livros/form',function(request,response){
+
+        const livroDao = new LivroDao(db);
+
+        livroDao.adiciona(request.body)
+            .then(response.redirect('/livros'))
+            .catch(erro => console.log(erro));
     });
 }
