@@ -36,6 +36,24 @@ module.exports = (app) =>{
         response.marko(require('../view/livros/form/form.marko'))
     });
 
+    app.get('/livros/form/:id',function(request,response){
+        const id = request.params.id;
+
+        livroDao = new LivroDao(db);
+
+        livroDao.buscaPorId(id)
+            .then(livro => {
+                console.log(livro);
+                response.marko(
+                    require('../view/livros/form/form.marko'),
+                    {
+                        livro:livro
+                    }
+                );
+            })
+            .catch(erro => console.log(erro));
+    });
+
     app.post('/livros/form',function(request,response){
 
         const livroDao = new LivroDao(db);
@@ -44,4 +62,23 @@ module.exports = (app) =>{
             .then(response.redirect('/livros'))
             .catch(erro => console.log(erro));
     });
+    
+    app.put('/livros',function(request,response){
+
+        const livroDao = new LivroDao(db);
+        console.log(request.body);
+        livroDao.atualiza(request.body)
+            .then(response.redirect('/livros'))
+            .catch(erro => console.log(erro));
+    });
+
+    app.delete('/livros/:id',(request,response) => {
+        const id = request.params.id;
+
+        const livroDao = new LivroDao(db);
+
+        livroDao.remove(id)
+            .then(() => response.status(200).end())
+            .catch(erro => console.log(erro));
+    })
 }

@@ -1,3 +1,5 @@
+const { set } = require("../../config/custom-express");
+
 class LivroDao{
     constructor(db){
         this._db = db;
@@ -41,16 +43,46 @@ class LivroDao{
 
     buscaPorId(id){
         return new Promise((resolve,reject) => {
-            this._db.all(
+            this._db.get(
                 'SELECT * FROM livros WHERE id = ?'
-                ,[
-                    id
-                ],
+                ,[id],
                 (erro,resultado) => {
                     if(erro) reject('Erro ao buscar tal livro');
 
                     resolve(resultado);
                 });
+        })
+    }
+
+    atualiza(livro){
+        return new Promise((resolve,reject) => {
+            console.log(livro,"--");
+            this._db.run(
+                'UPDATE livros SET titulo = ?, preco = ?, descricao = ? WHERE id = ?'
+                ,[
+                    livro.titulo,
+                    livro.preco,
+                    livro.descricao,
+                    livro.id
+                ],
+                (erro,resultdo) => {
+                    if(erro) reject('Não foi possível atualizar o livro');
+
+                    resolve();
+                }
+            )
+        });
+    }
+
+    remove(id){
+        return new Promise((resolve,reject) => {
+            this._db.run('DELETE FROM livros WHERE id = ?',
+            [id],
+            (erro) => {
+                if(erro) reject('Não foi possível deletar o livro');
+
+                resolve();
+            });
         })
     }
 }
