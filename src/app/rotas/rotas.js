@@ -6,16 +6,7 @@ module.exports = (app) =>{
 
     app.get('/',function(request,response){
         console.log(`URL: '/' acessada`);
-        response.send(`
-            <html>
-                <head>
-                    <meta charset='utf-8'/>
-                </head>
-                <body>
-                    <h1>Casa do código</h1>
-                </body>
-            </html>`
-        );
+        response.marko(require('../view/base/home/home.marko'));
     });
     
     app.get('/livros',function(request,response){
@@ -33,7 +24,10 @@ module.exports = (app) =>{
     });
 
     app.get('/livros/form',function(request,response){
-        response.marko(require('../view/livros/form/form.marko'))
+        response.marko(require('../view/livros/form/form.marko'),
+        {
+            livro:{}
+        })
     });
 
     app.get('/livros/form/:id',function(request,response){
