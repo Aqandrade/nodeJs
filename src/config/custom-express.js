@@ -25,4 +25,16 @@ app.use(methodOverride(function(req,res) {
 const rotas = require('../app/rotas/rotas.js');
 rotas(app);
 
+app.use(function(request,response,next){
+    return response.status(404).marko(
+        require('../app/view/base/erros/404.marko')
+    );
+});
+
+app.use(function(error,request,response,next) {
+    return response.status(500).marko(
+        require('../app/view/base/erros/500.marko')
+    );
+});
+
 module.exports = app;
