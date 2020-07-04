@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 
 const methodOverride = require('method-override');
 
+const template = require('../app/view/template');
+
 app.use('/estatico',express.static('src/app/public'));
 
 app.use(bodyParser.urlencoded({
@@ -25,16 +27,16 @@ app.use(methodOverride(function(req,res) {
 const rotas = require('../app/rotas/rotas.js');
 rotas(app);
 
-app.use(function(request,response,next){
-    return response.status(404).marko(
-        require('../app/view/base/erros/404.marko')
-    );
-});
+// app.use(function(request,response,next){
+//     return response.status(404).marko(
+//         require(template.base.erro404)
+//     );
+// });
 
-app.use(function(error,request,response,next) {
-    return response.status(500).marko(
-        require('../app/view/base/erros/500.marko')
-    );
-});
+// app.use(function(error,request,response,next) {
+//     return response.status(500).marko(
+//         require(template.base.erro500)
+//     );
+// });
 
 module.exports = app;
