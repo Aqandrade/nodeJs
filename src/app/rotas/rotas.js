@@ -1,3 +1,5 @@
+const { check, validationResult } = require('express-validator/check');
+
 const LivroDao = require('../infra/livro-dao');
 
 const db = require('../../config/database.js');
@@ -48,13 +50,27 @@ module.exports = (app) =>{
             .catch(erro => console.log(erro));
     });
 
-    app.post('/livros/form',function(request,response){
+    app.post('/livros/form',[
+        check('titulo').isLength({ min:5 }).withMessage('É necessário ter no mínimo 5 caracteres.'),
+        check('preco').isCurrency().withMessage('É necessário ser um valor monetário.')
 
-        const livroDao = new LivroDao(db);
+    ],function(request,response){
 
-        livroDao.adiciona(request.body)
-            .then(response.redirect('/livros'))
-            .catch(erro => console.log(erro));
+        erros = validationResult(request);
+
+        if(!erros.isEmpty()){
+            response.marko(require('../view/livros/form/form.marko'),
+            {
+                livro:request.body,
+                errosValidacao:erros.array()
+            });
+        }else{
+            const livroDao = new LivroDao(db);
+
+            livroDao.adiciona(request.body)
+                .then(response.redirect('/livros'))
+                .catch(erro => console.log(erro));
+        }
     });
     
     app.put('/livros',function(request,response){
