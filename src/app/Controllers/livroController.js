@@ -11,12 +11,13 @@ class LivroController{
 
     static rotas(){
         return {
-            lista:      '/livros',
-            cadastro:   '/livros/form',
-            edicao:     '/livros/form/:id',
-            cadastra:   '/livros/form',
-            edita:      '/livros/form',
-            deleta:     '/livros/:id'
+            autenticadas:   '/livros*',
+            lista:          '/livros',
+            cadastro:       '/livros/form',
+            edicao:         '/livros/form/:id',
+            cadastra:       '/livros/form',
+            edita:          '/livros/form',
+            deleta:         '/livros/:id'
         }
     }
 
